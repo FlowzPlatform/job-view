@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import dashboard from '@/components/dashboard'
-// import jobview from '@/components/jobview'
+import newdata from '@/components/newdata'
+import demo from '@/components/demo'
+// import table from '@/components/table'
 
 Vue.use(Router)
 
@@ -12,6 +14,16 @@ export default new Router({
       path: '/',
       name: 'dashboard',
       component: dashboard
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: demo
+    },
+    {
+      path: '/newdata',
+      name: 'newdata',
+      component: newdata
     }
   ]
 })
