@@ -1,17 +1,19 @@
 <style scoped>
+.high {
+  margin-left: 50px;
+}
 .main {
   margin-left: 70px;
-  column-span: 
 }
 .inner {
-  margin-left: 170px
+  margin-left: 70px
 }
 </style>
-<template>
-<div>
+<template >
+<div class="high">
     <Form ref='formInline' :model='formInline' :rules='ruleInline' inline><br><br>
-        <Row class='col-sm-10;' style="margin-left: 70px;" >
-           <div class="col-sm-10" style="background-color: red">
+        <Row class='col-sm-10;' style="margin-left: 200px;" >
+           <div class="col-sm-10">
         <Col span='5'><FormItem prop='host'>
            <label >HOST</label>
             <Input type='text' v-model.trim='formInline.host' placeholder='host'>
@@ -44,12 +46,12 @@
             {{key}}&nbsp;&nbsp;&nbsp;{{value}}
           </Col>
         </Row>
-        <Table :columns='columns1' :data='res'></Table>
+        <Table :columns='columns1' :data='res' border height="700" style=" margin-left: 0px; margin-right: 50px"></Table>
     </Form>
     </div>
 </template>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 import BootstrapVue from 'bootstrap-vue'
 import _ from 'lodash'
@@ -123,19 +125,72 @@ export default {
         },
         {
           title: 'Id',
-          key: 'id'
+          key: 'id',
+          width: 320
         },
         {
           title: 'Priority',
-          key: 'priority'
+          key: 'priority',
+          width: 190
         },
         {
           title: 'Date Created',
-          key: 'dateCreated' 
+          key: 'dateCreated',
+          sortable: true,
+          width: 240
         },
         {
           title: 'Status',
-          key: 'status'
+          key: 'status',
+          width: 190,     
+          filters: [
+              {
+                  label: 'created',
+                  value: 1
+              },
+              {
+                  label: 'waiting',
+                  value: 2
+              },
+              {
+                  label: 'active',
+                  value: 3
+              },
+              {
+                  label: 'completed',
+                  value: 4
+              },
+              {
+                  label: 'cancelled',
+                  value: 5
+              },
+              {
+                  label: 'failed',
+                  value: 6
+              },
+              {
+                  label: 'terminated',
+                  value: 7
+              }
+          ],
+          filterMultiple: false,
+          filterMethod (value, res){
+              if (value === 1) {
+                  return res.status === 'created';
+              } else if (value === 2) {
+                  return res.status === 'waiting';
+              }else if (value === 3) {
+                  return res.status === 'active';
+              }else if (value === 4) {
+                  return res.status === 'completed';
+              }else if (value === 5) {
+                  return res.status === 'cancelled';
+              }else if (value === 6) {
+                  return res.status === 'failed';
+              }else if (value === 7) {
+                  return res.status === 'terminated';
+              }
+          }
         }
       ],
       res: []
