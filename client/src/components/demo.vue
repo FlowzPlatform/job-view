@@ -46,8 +46,8 @@
             {{key}}&nbsp;&nbsp;&nbsp;{{value}}
           </Col>
         </Row>
-        <Table :columns='columns1' :data='pageData[page - 1]' border style=" margin-left: 0px; margin-right: 50px"></Table>
-        <Page :total="res.length" :current="page" :page-size="pagesize" size="small" align="center" show-sizer @on-change="pageChange" @on-page-size-change="pagesize1" />
+        <Table :columns='columns1' :data='pageData[page - 1]' :page-sorted="sortingchange" :page-filtered="filterchange" @on-sort-change="sortingChange" @on-filter-change="filterChange" border style=" margin-left: 0px; margin-right: 50px"></Table>
+        <Page :total="res.length" :current="page" :page-size="pagesize"  size="small" align="center" show-sizer @on-change="pageChange" @on-page-size-change="pagesize1"/>
     </Form>
     </div>
 </template>
@@ -55,6 +55,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 /* eslint-disable */
+import moment from "moment";
 import BootstrapVue from 'bootstrap-vue'
 import _ from 'lodash'
 import expandRow from './newdata.vue'
@@ -76,7 +77,8 @@ export default {
     return {
       page: 1,
       pagesize: 10,
-
+      sortingchange: 1,
+      filterchange: 1,
       formInline: {
         host: 'devrethink.flowzcluster.tk',
         port: 28015,
@@ -143,12 +145,17 @@ export default {
           title: 'Date Created',
           key: 'dateCreated',
           sortable: true,
-          width: 240
+          width: 240,
+          render: (h, params) => {
+            let newDate = params.row.dateCreated;
+            return h("div", moment(newDate).format("lll"));
+          }
         },
         {
           title: 'Status',
           key: 'status',
-          width: 190,
+          width: 190
+          ,
           filters: [
               {
                   label: 'created',
@@ -203,6 +210,22 @@ export default {
     }
   },
   methods: {
+     momentDate(dateCreated) {
+      if (!dateCreated) return "";
+      return dateCreated.moment().format("lll");
+    },
+    sortingChange (data) {
+      if (data.order==='normal') {
+      }else{
+      this.res = _.orderBy(this.res, data.key, data.order);
+      this.getValue();
+      }
+    },
+    filterChange (filterchange) {
+      console.log(filterchange);
+      this.filterchange = _.filter(this.filterchange, 'status');
+      this.getValue();
+    },
     pagesize1 (pagesize) {
          this.pagesize = this.pagesize
          this.getValue()
