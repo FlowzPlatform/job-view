@@ -47,7 +47,9 @@
           </Col>
         </Row>
         <Table :columns='columns1' :data='pageData[page - 1]' :page-sorted="sortingchange" :page-filtered="filterchange" @on-sort-change="sortingChange" @on-filter-change="filterChange" border style=" margin-left: 0px; margin-right: 50px"></Table>
+       <div v-if="res.length > 10">
         <Page :total="res.length" :current="page" :page-size="pagesize"  size="small" align="center" show-sizer @on-change="pageChange" @on-page-size-change="pagesize1"/>
+       </div>
     </Form>
     </div>
 </template>
@@ -75,6 +77,7 @@ export default {
       })
     }
     return {
+      len: 60,
       page: 1,
       pagesize: 10,
       sortingchange: 1,
@@ -212,7 +215,7 @@ export default {
   methods: {
      momentDate(dateCreated) {
       if (!dateCreated) return "";
-      return dateCreated.moment().format("lll");
+      return dateCreated.moment().format("lll")
     },
     sortingChange (data) {
       if (data.order==='normal') {
@@ -221,9 +224,9 @@ export default {
       this.getValue();
       }
     },
-    filterChange (filterchange) {
-      console.log(filterchange);
-      this.filterchange = _.filter(this.filterchange, 'status');
+    filterChange (data1) {
+      let filtervalue = data1.filters[data1._index].value
+      this.filterchange = _.filter(this.res, {status: filtervalue});
       this.getValue();
     },
     pagesize1 (pagesize) {
@@ -251,7 +254,6 @@ export default {
               }
               this.res = res.data
               this.getValue()
-              // console.log('pdata', this.pageData, this.pageData.length)
             })
             .catch(err => {
               console.log('Error', err)

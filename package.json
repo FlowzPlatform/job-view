@@ -15,5 +15,8 @@
     "url": "https://github.com/FlowzPlatform/job-view/issues"
   },
   "homepage": "https://github.com/FlowzPlatform/job-view#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dev": "^0.1.3"
+  }
 }
