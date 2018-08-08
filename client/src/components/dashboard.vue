@@ -16,12 +16,12 @@
                 <BreadcrumbItem>View</BreadcrumbItem>
             </Breadcrumb>
             <Card>
-                <div style="height:calc(100vh - 228px)">
+                <div style="min-height:calc(100vh - 228px);">
                     <jobview></jobview>
                 </div>
             </Card>
         </Content>
-        <Footer class="layout-footer-center">&copy; 2018 Flowz, All rights reserved 2017-2018.</Footer>
+        <Footer class="layout-footer-center">&copy; 2018 Cenacle, All rights reserved 2017-2018.</Footer>
     </Layout>
   </div>
 </template>

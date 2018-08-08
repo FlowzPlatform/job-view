@@ -6,12 +6,18 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import locale from 'iview/dist/locale/en-US'
+
+import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 
+// iview
 Vue.use(iView, {locale})
+
+// bootstrap-vue
+Vue.use(BootstrapVue)
 
 /* eslint-disable no-new */
 new Vue({

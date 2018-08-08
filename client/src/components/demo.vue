@@ -53,12 +53,9 @@
     </Form>
     </div>
 </template>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
 /* eslint-disable */
 import moment from "moment";
-import BootstrapVue from 'bootstrap-vue'
 import _ from 'lodash'
 import expandRow from './newdata.vue'
 import axios from 'axios'
@@ -83,10 +80,10 @@ export default {
       sortingchange: 1,
       filterchange: 1,
       formInline: {
-        host: 'devrethink.flowzcluster.tk',
+        host: '',
         port: 28015,
-        database: 'FlowzDBETL',
-        tablename: 'product_sync_worker'
+        database: '',
+        tablename: ''
       },
       status: {
         created: 0,
