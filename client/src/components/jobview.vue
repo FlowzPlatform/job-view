@@ -167,12 +167,33 @@
               </b-button>
             </template>
             <template slot="row-details" slot-scope="row">
-              <b-card>
+              <!-- <b-card>
                 <ul>
                   <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value}}</li>
                 </ul>
+              </b-card> -->
+              <b-card>
+                <div>
+                  <b-btn v-b-toggle.collapse1 variant="outline-secondary sm">Data</b-btn>
+                  <b-collapse id="collapse1" class="mt-2">
+                    <b-card>
+                      <pre>{{row.item.data}}</pre>
+                    </b-card>
+                  </b-collapse>
+                </div>
+                <div>
+                  <b-table responsive show-empty
+                   stacked="md"
+                   :bordered="true"
+                   :hover="true"
+                   :items="row.item.log"
+                   :fields="columns1"></b-table>
+                </div>
               </b-card>
-            </template>
+
+              <!-- <b-table striped hover :items="items.data"></b-table> -->
+                  <!-- <b-form-group horizontal label="Data" class="" style=" "></b-form-group> -->
+          </template>
           </b-table>
 
           <b-row>
@@ -209,10 +230,10 @@ export default {
   data () {
     return {
       form: {
-        host: '',
+        host: 'devrethink.flowzcluster.tk',
         port: 28015,
-        database: '',
-        tablename: ''
+        database: 'FlowzDBETL',
+        tablename: 'product_sync_worker'
       },
       show: true,
       status: {
@@ -305,6 +326,36 @@ export default {
         {
           key: 'actions',
           label: 'Actions'
+        }
+      ],
+      columns1: [
+        {
+          title: 'date',
+          key: 'date'
+        },
+        {
+          title: 'message',
+          key: 'message'
+        },
+        {
+          title: 'processCount',
+          key: 'processCount'
+        },
+        {
+          title: 'queueId',
+          key: 'queueId'
+        },
+        {
+          title: 'retryCount',
+          key: 'retryCount'
+        },
+        {
+          title: 'status',
+          key: 'status'
+        },
+        {
+          title: 'type',
+          key: 'type'
         }
       ],
       currentPage: 1,
