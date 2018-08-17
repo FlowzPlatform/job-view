@@ -41,12 +41,14 @@
                                   label-for="database">
                         <b-form-input
                                     type="text"
+                                    id="database"
                                     v-model.trim="form.database"
                                     required
                                     size="sm"
                                     placeholder="Database Name">
                         </b-form-input>
                       </b-form-group>
+                      <b-span v-if="showNullErr" style="color:red;">Please fill correct value</b-span>
                     </b-col>
                     <b-col>
                       <b-form-group
@@ -60,6 +62,7 @@
                                     placeholder="Table Name">
                         </b-form-input>
                       </b-form-group>
+                      <b-span v-if="showNullErr1" style="color:red;">Please fill correct value</b-span>
                     </b-col>
                     <b-col>
                       <label>&nbsp;</label>
@@ -232,8 +235,8 @@ export default {
       form: {
         host: 'devrethink.flowzcluster.tk',
         port: 28015,
-        database: 'FlowzDBETL',
-        tablename: 'product_sync_worker'
+        database: '',
+        tablename: ''
       },
       show: true,
       status: {
@@ -331,7 +334,8 @@ export default {
       columns1: [
         {
           title: 'date',
-          key: 'date'
+          key: 'date',
+          sortable: true
         },
         {
           title: 'message',
@@ -339,7 +343,8 @@ export default {
         },
         {
           title: 'processCount',
-          key: 'processCount'
+          key: 'processCount',
+          sortable: true
         },
         {
           title: 'queueId',
@@ -347,7 +352,8 @@ export default {
         },
         {
           title: 'retryCount',
-          key: 'retryCount'
+          key: 'retryCount',
+          sortable: true
         },
         {
           title: 'status',
@@ -367,7 +373,9 @@ export default {
       sortDirection: 'asc',
       filter: null,
       modalInfo: { title: '', content: '' },
-      isResponse: false
+      isResponse: false,
+      showNullErr: false,
+      showNullErr1: false
     }
   },
   filters: {
@@ -385,6 +393,14 @@ export default {
     },
     calculateLength () {
       return this.items.length
+    },
+    inputClass: function () {
+      // var inputField=document.getElementById('database').value
+      if (this.form.database === ' ') {
+        return 'invalid'
+      } else {
+        return 'valid'
+      }
     }
   },
   methods: {
@@ -392,30 +408,46 @@ export default {
       return this.status[value].color
     },
     onSubmit (evt) {
+      this.showNullErr = false
+      this.showNullErr1 = false
+      // console.log('this.form.tablename',this.form.tablename.trim(), typeof this.form.tablename)
+      var tNme = this.form.tablename
+      var dNme = this.form.database
       evt.preventDefault()
       this.isResponse = false
-      let url = 'http://localhost:3030'
-      this.items = []
-      axios.post(url + '/job-list', this.form)
-        .then(res => {
-          console.log('Success', res.data)
-          this.$Notice.success({title: 'Successfully Connected'})
-          for (let key in this.status) {
-            this.status[key].count = _.filter(res.data, {status: key}).length
-          }
-          this.items = _.remove(res.data, (m) => {
-            if (m.priority) {
-              return m
-            }
-          })
-          this.isResponse = true
-          // this.res = res.data
-          // this.getValue()
-        })
-        .catch(err => {
-          console.log('Error', err)
-        })
-      // alert(JSON.stringify(this.form))
+      if (tNme !== '') {
+        if (dNme !== '') {
+          let url = 'http://localhost:3030'
+          this.items = []
+          axios.post(url + '/job-list', this.form)
+            .then(res => {
+              console.log('Success', res.data)
+              this.$Notice.success({title: 'Successfully Connected'})
+              for (let key in this.status) {
+                this.status[key].count = _.filter(res.data, {status: key}).length
+              }
+              this.items = _.remove(res.data, (m) => {
+                if (m.priority) {
+                  return m
+                }
+              })
+              this.isResponse = true
+              // this.res = res.data
+              // this.getValue()
+            })
+            .catch(err => {
+              console.log('Error', err)
+            })
+        // alert(JSON.stringify(this.form))
+        } else {
+          this.showNullErr = true
+        }
+      } else if (tNme === '' && dNme === '') {
+        this.showNullErr = true
+        this.showNullErr1 = true
+      } else {
+        this.showNullErr1 = true
+      }
     },
     onReset (evt) {
       evt.preventDefault()
